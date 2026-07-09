@@ -1,25 +1,17 @@
-# Navegar a tu proyecto
-cd C:\Users\carel\OneDrive\Escritorio\WebyAPIs
-
-# Crear package.json en la raíz
-cat > package.json << 'EOF'
-{
-  "name": "webyapis",
-  "version": "1.0.0",
-  "description": "API REST para gestión de productos",
-  "main": "backend/server.js",
-  "scripts": {
-    "start": "node backend/server.js",
-    "dev": "nodemon backend/server.js"
-  },
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.18.2"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.1"
-  },
-  "author": "carelisriverapando-ctrl",
-  "license": "MIT"
-}
-EOF
+{ 
+  "name": "webyapis", 
+  "version": "1.0.0", 
+  "description": "API REST para productos", 
+  "main": "backend/server.js", 
+  "scripts": { 
+    "start": "node backend/server.js", 
+    "dev": "nodemon backend/server.js" 
+  }, 
+  "dependencies": { 
+    "cors": "^2.8.5", 
+    "express": "^4.18.2" 
+  }, 
+  "devDependencies": { 
+    "nodemon": "^3.0.1" 
+  } 
+} 
