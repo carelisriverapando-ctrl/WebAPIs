@@ -1,3 +1,7 @@
-node_modules/ 
-.env 
-.DS_Store 
+cat > .gitignore << 'EOF'
+node_modules/
+.env
+.DS_Store
+*.log
+npm-debug.log*
+EOF
