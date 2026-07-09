@@ -1,6 +1,8 @@
 // ============ CONFIGURACIÓN ============
-// ⚠️ CAMBIA ESTA URL POR LA DE TU API EN RENDER
-const API_URL = 'https://webyapis-api.onrender.com/api';
+// Usar la URL actual (automático)
+const API_URL = '/api';  // <--- CAMBIADO: usa la ruta relativa
+
+// El resto del código queda igual...
 
 // ============ ELEMENTOS DOM ============
 const pacientesList = document.getElementById('pacientes-list');

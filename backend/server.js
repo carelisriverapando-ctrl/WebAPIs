@@ -1,10 +1,15 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 10000;
 
+// ============ MIDDLEWARE ============
 app.use(cors());
 app.use(express.json());
+
+// Servir archivos estáticos del frontend
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 // ============ BASE DE DATOS EN MEMORIA ============
 let pacientes = [
@@ -115,33 +120,6 @@ app.post('/api/pacientes', (req, res) => {
     });
 });
 
-// Actualizar paciente
-app.put('/api/pacientes/:id', (req, res) => {
-    const id = parseInt(req.params.id);
-    const index = pacientes.findIndex(p => p.id === id);
-    
-    if (index === -1) {
-        return res.status(404).json({
-            success: false,
-            error: 'Paciente no encontrado'
-        });
-    }
-    
-    const { nombre, edad, telefono, diagnostico, estado } = req.body;
-    
-    if (nombre) pacientes[index].nombre = nombre;
-    if (edad) pacientes[index].edad = parseInt(edad);
-    if (telefono) pacientes[index].telefono = telefono;
-    if (diagnostico) pacientes[index].diagnostico = diagnostico;
-    if (estado) pacientes[index].estado = estado;
-    
-    res.json({
-        success: true,
-        message: 'Paciente actualizado',
-        data: pacientes[index]
-    });
-});
-
 // Eliminar paciente
 app.delete('/api/pacientes/:id', (req, res) => {
     const id = parseInt(req.params.id);
@@ -204,18 +182,9 @@ app.post('/api/citas', (req, res) => {
 });
 
 // ============ RUTA PRINCIPAL ============
+// Esta ruta envía el archivo index.html
 app.get('/', (req, res) => {
-    res.json({
-        mensaje: '🏥 API Hospital - Sistema de Gestión Médica',
-        version: '1.0.0',
-        endpoints: {
-            pacientes: '/api/pacientes',
-            pacientePorId: '/api/pacientes/:id',
-            crearPaciente: '/api/pacientes (POST)',
-            citas: '/api/citas',
-            crearCita: '/api/citas (POST)'
-        }
-    });
+    res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
 // ============ INICIAR SERVIDOR ============
@@ -223,4 +192,5 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log(`🏥 Servidor Hospital corriendo en puerto ${PORT}`);
     console.log(`📋 Pacientes: ${pacientes.length}`);
     console.log(`📅 Citas: ${citas.length}`);
+    console.log(`🌐 Frontend: https://webyapis-api.onrender.com`);
 });
