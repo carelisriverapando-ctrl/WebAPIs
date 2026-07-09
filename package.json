@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {  
   "name": "webyapis",  
   "version": "1.0.0",  
@@ -11,3 +12,18 @@
     "express": "^4.18.2"  
   }  
 }  
+=======
+{
+  "name": "webyapis",
+  "version": "1.0.0",
+  "description": "API REST para gestion de productos",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
+}
+>>>>>>> dc178f2c5199503106f54a3f7bb4ca7030006601
