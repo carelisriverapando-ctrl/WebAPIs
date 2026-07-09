@@ -1,38 +1,191 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Hospital API Test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏥 Hospital San Rafael - Sistema de Gestión</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <h1>🏥 Sistema Hospital</h1>
-    <button onclick="registrarPaciente()">Registrar Paciente</button>
-    <button onclick="verPacientes()">Ver Pacientes</button>
-    <div id="resultado"></div>
-
-    <script>
-        const API = 'https://webyapis-api.onrender.com/api';
-        
-        async function verPacientes() {
-            const res = await fetch(`${API}/pacientes`);
-            const data = await res.json();
-            document.getElementById('resultado').innerHTML = 
-                '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
-        }
-        
-        async function registrarPaciente() {
-            const nombre = prompt('Nombre:');
-            const edad = prompt('Edad:');
-            const paciente = { nombre, edad: parseInt(edad), estado: 'Activo' };
+    <div class="app">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>San Rafael</span>
+                </div>
+                <p class="logo-sub">Sistema de Gestión</p>
+            </div>
             
-            const res = await fetch(`${API}/pacientes`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(paciente)
-            });
-            const data = await res.json();
-            document.getElementById('resultado').innerHTML = 
-                '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
-        }
-    </script>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-tab="dashboard">
+                    <i class="fas fa-th-large"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="pacientes">
+                    <i class="fas fa-users"></i>
+                    <span>Pacientes</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="citas">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Citas</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="registrar">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Registrar</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <i class="fas fa-user-md"></i>
+                    <div>
+                        <span class="user-name">Dr. Rivera</span>
+                        <span class="user-role">Administrador</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- HEADER -->
+            <header class="top-header">
+                <div class="header-left">
+                    <h1 id="pageTitle">Dashboard</h1>
+                    <p id="pageSubtitle">Bienvenido al sistema de gestión hospitalaria</p>
+                </div>
+                <div class="header-right">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Buscar paciente...">
+                    </div>
+                    <div class="header-actions">
+                        <button class="icon-btn"><i class="fas fa-bell"></i></button>
+                        <button class="icon-btn"><i class="fas fa-cog"></i></button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- DASHBOARD -->
+            <section id="tab-dashboard" class="tab-content active">
+                <div class="stats-grid">
+                    <div class="stat-card blue">
+                        <div class="stat-icon"><i class="fas fa-users"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="totalPacientes">0</span>
+                            <span class="stat-label">Pacientes Totales</span>
+                        </div>
+                    </div>
+                    <div class="stat-card green">
+                        <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="totalCitas">0</span>
+                            <span class="stat-label">Citas Programadas</span>
+                        </div>
+                    </div>
+                    <div class="stat-card purple">
+                        <div class="stat-icon"><i class="fas fa-user-md"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-number">5</span>
+                            <span class="stat-label">Médicos Activos</span>
+                        </div>
+                    </div>
+                    <div class="stat-card orange">
+                        <div class="stat-icon"><i class="fas fa-ambulance"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-number">3</span>
+                            <span class="stat-label">Urgencias</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-clock"></i> Últimos Pacientes</h3>
+                        <div id="ultimosPacientes" class="list-container">
+                            <p class="loading-text">Cargando...</p>
+                        </div>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-calendar-day"></i> Próximas Citas</h3>
+                        <div id="proximasCitas" class="list-container">
+                            <p class="loading-text">Cargando...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PACIENTES -->
+            <section id="tab-pacientes" class="tab-content">
+                <div class="section-toolbar">
+                    <h2><i class="fas fa-users"></i> Lista de Pacientes</h2>
+                    <button class="btn-primary-small" onclick="cargarPacientes()">
+                        <i class="fas fa-sync"></i> Actualizar
+                    </button>
+                </div>
+                <div id="pacientes-list" class="table-container">
+                    <div class="loading-text">Cargando pacientes...</div>
+                </div>
+            </section>
+
+            <!-- CITAS -->
+            <section id="tab-citas" class="tab-content">
+                <div class="section-toolbar">
+                    <h2><i class="fas fa-calendar-check"></i> Citas Médicas</h2>
+                    <button class="btn-primary-small" onclick="mostrarFormularioCita()">
+                        <i class="fas fa-plus"></i> Nueva Cita
+                    </button>
+                </div>
+                <div id="citas-list" class="table-container">
+                    <div class="loading-text">Cargando citas...</div>
+                </div>
+            </section>
+
+            <!-- REGISTRAR -->
+            <section id="tab-registrar" class="tab-content">
+                <div class="form-card">
+                    <h2><i class="fas fa-user-plus"></i> Registrar Nuevo Paciente</h2>
+                    <form id="pacienteForm" class="form-grid">
+                        <div class="form-group">
+                            <label><i class="fas fa-user"></i> Nombre Completo *</label>
+                            <input type="text" id="nombre" placeholder="Ej: Juan Pérez" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar-alt"></i> Edad *</label>
+                            <input type="number" id="edad" placeholder="35" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-phone"></i> Teléfono</label>
+                            <input type="text" id="telefono" placeholder="+51 999 888 777">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-stethoscope"></i> Diagnóstico</label>
+                            <input type="text" id="diagnostico" placeholder="Ej: Hipertensión">
+                        </div>
+                        <div class="form-group full-width">
+                            <label><i class="fas fa-heartbeat"></i> Estado</label>
+                            <select id="estado">
+                                <option value="Activo">🟢 Activo</option>
+                                <option value="En tratamiento">🟡 En tratamiento</option>
+                                <option value="En recuperación">🔵 En recuperación</option>
+                                <option value="Dado de alta">⚪ Dado de alta</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-save"></i> Registrar Paciente
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
