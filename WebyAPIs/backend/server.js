@@ -1,8 +1,3 @@
-# Crear la carpeta backend (si no existe)
-mkdir backend 2>nul
-
-# Crear server.js
-cat > backend\server.js << 'EOF'
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -28,24 +23,18 @@ app.get('/api/productos', (req, res) => {
 app.get('/api/productos/:id', (req, res) => {
     const id = parseInt(req.params.id);
     const producto = productos.find(p => p.id === id);
-    if (!producto) return res.status(404).json({ error: 'Producto no encontrado' });
+    if (!producto) return res.status(404).json({ error: 'No encontrado' });
     res.json({ success: true, data: producto });
 });
 
 app.post('/api/productos', (req, res) => {
     const { nombre, precio, categoria } = req.body;
     if (!nombre || !precio) return res.status(400).json({ error: 'Faltan campos' });
-    const nuevoProducto = { 
-        id: productos.length + 1, 
-        nombre, 
-        precio: parseFloat(precio), 
-        categoria: categoria || 'Sin categoría' 
-    };
+    const nuevoProducto = { id: productos.length + 1, nombre, precio: parseFloat(precio), categoria: categoria || 'Sin categoría' };
     productos.push(nuevoProducto);
-    res.status(201).json({ success: true, message: 'Producto creado', data: nuevoProducto });
+    res.status(201).json({ success: true, message: 'Creado', data: nuevoProducto });
 });
 
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`✅ Servidor corriendo en puerto ${PORT}`);
 });
-EOF
