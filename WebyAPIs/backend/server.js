@@ -1,54 +1,51 @@
+# Crear la carpeta backend (si no existe)
+mkdir backend 2>nul
+
+# Crear server.js
+cat > backend\server.js << 'EOF'
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Datos de ejemplo
-const productos = [
-    { id: 1, nombre: 'Laptop', precio: 1200 },
-    { id: 2, nombre: 'Mouse', precio: 25 },
-    { id: 3, nombre: 'Teclado', precio: 45 }
+let productos = [
+    { id: 1, nombre: 'Laptop Gaming', precio: 1200, categoria: 'Electrónicos' },
+    { id: 2, nombre: 'Mouse Inalámbrico', precio: 35, categoria: 'Periféricos' },
+    { id: 3, nombre: 'Teclado Mecánico', precio: 80, categoria: 'Periféricos' }
 ];
 
-// Ruta de prueba
 app.get('/', (req, res) => {
-    res.json({ mensaje: 'API funcionando correctamente' });
+    res.json({ mensaje: '🚀 API funcionando correctamente', version: '1.0.0' });
 });
 
-// Obtener todos los productos
 app.get('/api/productos', (req, res) => {
-    res.json(productos);
+    res.json({ success: true, count: productos.length, data: productos });
 });
 
-// Obtener un producto por ID
 app.get('/api/productos/:id', (req, res) => {
     const id = parseInt(req.params.id);
     const producto = productos.find(p => p.id === id);
-    
-    if (producto) {
-        res.json(producto);
-    } else {
-        res.status(404).json({ error: 'Producto no encontrado' });
-    }
+    if (!producto) return res.status(404).json({ error: 'Producto no encontrado' });
+    res.json({ success: true, data: producto });
 });
 
-// Crear nuevo producto
 app.post('/api/productos', (req, res) => {
-    const { nombre, precio } = req.body;
-    const nuevoProducto = {
-        id: productos.length + 1,
-        nombre,
-        precio
+    const { nombre, precio, categoria } = req.body;
+    if (!nombre || !precio) return res.status(400).json({ error: 'Faltan campos' });
+    const nuevoProducto = { 
+        id: productos.length + 1, 
+        nombre, 
+        precio: parseFloat(precio), 
+        categoria: categoria || 'Sin categoría' 
     };
     productos.push(nuevoProducto);
-    res.status(201).json(nuevoProducto);
+    res.status(201).json({ success: true, message: 'Producto creado', data: nuevoProducto });
 });
 
-// Iniciar servidor
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en puerto ${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`✅ Servidor corriendo en puerto ${PORT}`);
 });
+EOF
