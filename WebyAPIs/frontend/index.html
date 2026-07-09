@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Productos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>📦 Gestión de Productos</h1>
+        
+        <div class="api-status" id="apiStatus">
+            Verificando conexión con API...
+        </div>
+
+        <div class="form-section">
+            <h2>Agregar Nuevo Producto</h2>
+            <form id="productForm">
+                <input type="text" id="nombre" placeholder="Nombre del producto" required>
+                <input type="number" id="precio" placeholder="Precio" required>
+                <button type="submit">Agregar Producto</button>
+            </form>
+        </div>
+
+        <div class="products-section">
+            <h2>Lista de Productos</h2>
+            <div id="productsList" class="products-grid">
+                <!-- Los productos se cargarán aquí -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
