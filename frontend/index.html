@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏥 Sistema Hospital - Gestión de Pacientes</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-hospital"></i>
+                    <h1>🏥 Sistema Hospital</h1>
+                </div>
+                <p class="subtitle">Gestión de Pacientes y Citas Médicas</p>
+                <div class="stats">
+                    <div class="stat">
+                        <span class="stat-number" id="totalPacientes">0</span>
+                        <span class="stat-label">Pacientes</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="totalCitas">0</span>
+                        <span class="stat-label">Citas</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- NAVEGACIÓN -->
+        <nav>
+            <button class="nav-btn active" data-tab="pacientes">
+                <i class="fas fa-users"></i> Pacientes
+            </button>
+            <button class="nav-btn" data-tab="citas">
+                <i class="fas fa-calendar-check"></i> Citas
+            </button>
+            <button class="nav-btn" data-tab="registrar">
+                <i class="fas fa-user-plus"></i> Registrar Paciente
+            </button>
+        </nav>
+
+        <!-- TAB: PACIENTES -->
+        <section id="tab-pacientes" class="tab-content active">
+            <div class="section-header">
+                <h2><i class="fas fa-users"></i> Lista de Pacientes</h2>
+                <button class="btn-refresh" onclick="cargarPacientes()">
+                    <i class="fas fa-sync"></i>
+                </button>
+            </div>
+            <div id="pacientes-list" class="card-grid">
+                <div class="loading">Cargando pacientes...</div>
+            </div>
+        </section>
+
+        <!-- TAB: CITAS -->
+        <section id="tab-citas" class="tab-content">
+            <div class="section-header">
+                <h2><i class="fas fa-calendar-check"></i> Citas Médicas</h2>
+            </div>
+            <div id="citas-list" class="card-grid">
+                <div class="loading">Cargando citas...</div>
+            </div>
+        </section>
+
+        <!-- TAB: REGISTRAR PACIENTE -->
+        <section id="tab-registrar" class="tab-content">
+            <div class="form-container">
+                <h2><i class="fas fa-user-plus"></i> Registrar Nuevo Paciente</h2>
+                <form id="pacienteForm">
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Nombre completo *</label>
+                        <input type="text" id="nombre" placeholder="Ej: Juan Pérez" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar-alt"></i> Edad *</label>
+                            <input type="number" id="edad" placeholder="35" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-phone"></i> Teléfono</label>
+                            <input type="text" id="telefono" placeholder="555-1234">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-stethoscope"></i> Diagnóstico</label>
+                        <input type="text" id="diagnostico" placeholder="Ej: Hipertensión">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-heartbeat"></i> Estado</label>
+                        <select id="estado">
+                            <option value="Activo">Activo</option>
+                            <option value="En tratamiento">En tratamiento</option>
+                            <option value="En recuperación">En recuperación</option>
+                            <option value="Dado de alta">Dado de alta</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save"></i> Registrar Paciente
+                    </button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
